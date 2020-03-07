@@ -5,15 +5,15 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
     lateinit var bt: Button
+    lateinit var interactor: Interactor
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        Configurator.INSTANCE.setCleanArchitecture(this)
 
         findViews()
     }
@@ -21,33 +21,43 @@ class MainActivity : AppCompatActivity() {
     private fun findViews() {
         bt = bt_activity_main
         bt.setOnClickListener {
-
-            val call = RetrofitConfig().buildingService().list("random")
-            call.enqueue(object : Callback<ChuckResponse> {
-                override fun onResponse(
-                    call: Call<ChuckResponse>?,
-                    response: Response<ChuckResponse>?
-                ) {
-                    response?.body()?.let {
-                        val resposta: ChuckResponse = it
-                        Toast.makeText(
-                            baseContext,
-                            resposta.value,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-
-                override fun onFailure(
-                    call: Call<ChuckResponse>?,
-                    t: Throwable?
-                ) {
-                }
-            })
-
+            interactor.fetchSearchRandom()
         }
     }
+
+    fun exibirErro(erro: String?) {
+        Toast.makeText(
+            baseContext,
+            erro,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    fun exibirResultado(resposta: ChuckResponse) {
+        Toast.makeText(
+            baseContext,
+            resposta.value,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    fun listarRespostas(resposta: List<ChuckResponse>) {
+        Toast.makeText(
+            baseContext,
+            resposta.get(0).value,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    fun listarCategorias(resposta: List<String>) {
+        Toast.makeText(
+            baseContext,
+            resposta.get(0),
+            Toast.LENGTH_SHORT
+        ).show()
+    }
 }
+
 
 
 
