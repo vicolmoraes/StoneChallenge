@@ -11,6 +11,9 @@ import com.example.stonechallenge.R
 import com.example.stonechallenge.entity.ChuckFact
 import com.example.stonechallenge.interactor.Interactor
 import com.example.stonechallenge.router.Router
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.JustifyContent
 import kotlinx.android.synthetic.main.activity_search.*
 import java.io.Serializable
 
@@ -45,6 +48,12 @@ class SearchActivity : AppCompatActivity(),
                 return false
             }
         })
+
+        val recyclerView = rv_categorias_activity_search
+        val layoutManager = FlexboxLayoutManager(this)
+        layoutManager.flexDirection = FlexDirection.COLUMN
+        layoutManager.justifyContent = JustifyContent.FLEX_END
+        recyclerView.layoutManager = layoutManager
     }
 
     override fun exibirErro(resposta: String?) {
