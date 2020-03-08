@@ -1,5 +1,6 @@
 package com.example.stonechallenge.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
@@ -11,6 +12,7 @@ import com.example.stonechallenge.entity.ChuckFact
 import com.example.stonechallenge.interactor.Interactor
 import com.example.stonechallenge.router.Router
 import kotlinx.android.synthetic.main.activity_search.*
+import java.io.Serializable
 
 
 class SearchActivity : AppCompatActivity(),
@@ -37,7 +39,7 @@ class SearchActivity : AppCompatActivity(),
                 if (event.getAction() === KeyEvent.ACTION_DOWN &&
                     keyCode == KeyEvent.KEYCODE_ENTER
                 ) {
-                    interactor.fetchSearchCategorie(etBusca.text.toString().trim())
+                    interactor.fetchSearchText(etBusca.text.toString().trim())
                     return true
                 }
                 return false
@@ -54,19 +56,21 @@ class SearchActivity : AppCompatActivity(),
     }
 
     override fun exibirResultado(resposta: ChuckFact) {
-        Toast.makeText(
-            baseContext,
-            resposta.value,
-            Toast.LENGTH_SHORT
-        ).show()
+        val lista: ArrayList<ChuckFact> = ArrayList()
+        lista.add(resposta)
+        val intent: Intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("FACTS", lista as Serializable)
+        startActivity(intent)
     }
 
     override fun listarRespostas(resposta: List<ChuckFact>) {
-        Toast.makeText(
-            baseContext,
-            resposta.get(0).value,
-            Toast.LENGTH_SHORT
-        ).show()
+        val lista: ArrayList<ChuckFact> = ArrayList()
+        if (resposta.size > 100)
+            lista.addAll(resposta.subList(0, 100))
+        else lista.addAll(resposta)
+        val intent: Intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("FACTS", lista as Serializable)
+        startActivity(intent)
     }
 
     override fun listarCategorias(resposta: List<String>) {

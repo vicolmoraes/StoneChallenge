@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stonechallenge.R
+import com.example.stonechallenge.entity.ChuckFact
 import com.example.stonechallenge.interactor.Interactor
 import com.example.stonechallenge.router.Router
 import kotlinx.android.synthetic.main.activity_main.*
@@ -16,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity(),
     ActivityPadrao {
     lateinit var rvResultados: RecyclerView
+    var listaFatos: ArrayList<ChuckFact> = ArrayList()
     override lateinit var interactor: Interactor
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +25,7 @@ class MainActivity : AppCompatActivity(),
 
         Router.INSTANCE.setCleanArchitecture(this)
 
-        findViews()
+        setRecycler()
         iniciarToolbar("Bem Vindo")
     }
 
@@ -47,10 +49,24 @@ class MainActivity : AppCompatActivity(),
 
         return true
     }
-    private fun findViews() {
+
+    private fun setRecycler() {
         rvResultados = rv_resultados_activity_main
+        if (intent.extras?.get("FACTS") != null)
+            listaFatos = intent.extras?.get("FACTS") as ArrayList<ChuckFact>
+        rvResultados.adapter =
+            FactAdapter(listaFatos, this, { partItem: ChuckFact -> partItemClicked(partItem) })
     }
 
+    private fun partItemClicked(fato: ChuckFact) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, fato.url)
+            type = "text/plain"
+        }
+
+        startActivity(Intent.createChooser(sendIntent, null))
+    }
 }
 
 

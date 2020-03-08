@@ -2,6 +2,7 @@ package com.example.stonechallenge.interactor
 
 import com.example.stonechallenge.Constants
 import com.example.stonechallenge.entity.ChuckFact
+import com.example.stonechallenge.entity.ChuckFacts
 import com.example.stonechallenge.presenter.Presenter
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -27,7 +28,7 @@ class Interactor {
         observable
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<List<ChuckFact>> {
+            .subscribe(object : Observer<ChuckFacts> {
                 override fun onSubscribe(d: Disposable?) {
                 }
 
@@ -38,8 +39,8 @@ class Interactor {
                     presenter.exibirErro(e.message)
                 }
 
-                override fun onNext(resposta: List<ChuckFact>) {
-                    presenter.exibirResultados(resposta)
+                override fun onNext(resposta: ChuckFacts) {
+                    presenter.exibirResultados(resposta.result)
                 }
             })
     }
