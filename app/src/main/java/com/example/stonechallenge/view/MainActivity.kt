@@ -1,4 +1,4 @@
-package com.example.stonechallenge
+package com.example.stonechallenge.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,17 +7,21 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
+import com.example.stonechallenge.R
+import com.example.stonechallenge.interactor.Interactor
+import com.example.stonechallenge.router.Router
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity(), ActivityPadrao {
+class MainActivity : AppCompatActivity(),
+    ActivityPadrao {
     lateinit var rvResultados: RecyclerView
     override lateinit var interactor: Interactor
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Configurator.INSTANCE.setCleanArchitecture(this)
+        Router.INSTANCE.setCleanArchitecture(this)
 
         findViews()
         iniciarToolbar("Bem Vindo")
@@ -45,12 +49,7 @@ class MainActivity : AppCompatActivity(), ActivityPadrao {
     }
     private fun findViews() {
         rvResultados = rv_resultados_activity_main
-//        bt = bt_activity_main
-//        bt.setOnClickListener {
-//            interactor.fetchSearchRandom()
-//        }
     }
-
 
 }
 

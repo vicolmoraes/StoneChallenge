@@ -1,4 +1,4 @@
-package com.example.stonechallenge
+package com.example.stonechallenge.view
 
 import android.os.Bundle
 import android.view.KeyEvent
@@ -6,17 +6,22 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.stonechallenge.R
+import com.example.stonechallenge.entity.ChuckFact
+import com.example.stonechallenge.interactor.Interactor
+import com.example.stonechallenge.router.Router
 import kotlinx.android.synthetic.main.activity_search.*
 
 
-class SearchActivity : AppCompatActivity(), ActivityPadrao {
+class SearchActivity : AppCompatActivity(),
+    ActivityPadrao {
     lateinit var etBusca: EditText
     override lateinit var interactor: Interactor
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        Configurator.INSTANCE.setCleanArchitecture(this)
+        Router.INSTANCE.setCleanArchitecture(this)
         findViews()
     }
 

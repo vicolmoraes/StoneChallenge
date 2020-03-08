@@ -1,4 +1,7 @@
-package com.example.stonechallenge
+package com.example.stonechallenge.presenter
+
+import com.example.stonechallenge.entity.ChuckFact
+import com.example.stonechallenge.view.ActivityPadrao
 
 class Presenter {
 

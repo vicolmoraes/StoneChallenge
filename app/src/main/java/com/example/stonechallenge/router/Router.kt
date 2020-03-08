@@ -1,6 +1,10 @@
-package com.example.stonechallenge
+package com.example.stonechallenge.router
 
-enum class Configurator {
+import com.example.stonechallenge.interactor.Interactor
+import com.example.stonechallenge.presenter.Presenter
+import com.example.stonechallenge.view.ActivityPadrao
+
+enum class Router {
 
     INSTANCE;
 

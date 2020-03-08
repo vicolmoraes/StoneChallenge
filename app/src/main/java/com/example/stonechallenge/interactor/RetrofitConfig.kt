@@ -1,4 +1,4 @@
-package com.example.stonechallenge
+package com.example.stonechallenge.interactor
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.Retrofit

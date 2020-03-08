@@ -1,6 +1,8 @@
-package com.example.stonechallenge
+package com.example.stonechallenge.interactor
 
 
+import com.example.stonechallenge.Constants
+import com.example.stonechallenge.entity.ChuckFact
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Url

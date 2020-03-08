@@ -1,5 +1,8 @@
-package com.example.stonechallenge
+package com.example.stonechallenge.interactor
 
+import com.example.stonechallenge.Constants
+import com.example.stonechallenge.entity.ChuckFact
+import com.example.stonechallenge.presenter.Presenter
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

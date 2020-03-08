@@ -1,4 +1,7 @@
-package com.example.stonechallenge
+package com.example.stonechallenge.view
+
+import com.example.stonechallenge.entity.ChuckFact
+import com.example.stonechallenge.interactor.Interactor
 
 interface ActivityPadrao {
     var interactor: Interactor
