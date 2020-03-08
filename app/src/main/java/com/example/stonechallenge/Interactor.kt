@@ -1,8 +1,9 @@
 package com.example.stonechallenge
 
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 
 class Interactor {
     lateinit var presenter: Presenter
@@ -19,67 +20,69 @@ class Interactor {
     }
 
     private fun fetch(chave: String) {
-        val call = RetrofitConfig().buildingService().list(chave)
-        call.enqueue(object : Callback<List<ChuckResponse>?> {
-            override fun onResponse(
-                call: Call<List<ChuckResponse>?>?,
-                response: Response<List<ChuckResponse>?>?
-            ) {
-                response?.body()?.let {
-                    val resposta: List<ChuckResponse> = it
+        val observable = RetrofitConfig().buildingService().list(chave)
+        observable
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<List<ChuckResponse>> {
+                override fun onSubscribe(d: Disposable?) {
+                }
+
+                override fun onComplete() {
+                }
+
+                override fun onError(e: Throwable) {
+                    presenter.exibirErro(e.message)
+                }
+
+                override fun onNext(resposta: List<ChuckResponse>) {
                     presenter.exibirResultados(resposta)
                 }
-            }
-
-            override fun onFailure(
-                call: Call<List<ChuckResponse>?>?,
-                t: Throwable?
-            ) {
-                presenter.exibirErro(t?.message)
-            }
-        })
+            })
     }
 
     fun fetchSearchListCategories() {
-        val call = RetrofitConfig().buildingService().listCategories()
-        call.enqueue(object : Callback<List<String>?> {
-            override fun onResponse(
-                call: Call<List<String>?>?,
-                response: Response<List<String>?>?
-            ) {
-                response?.body()?.let {
-                    val resposta: List<String> = it
+        val observable = RetrofitConfig().buildingService().listCategories()
+        observable
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<List<String>> {
+                override fun onSubscribe(d: Disposable?) {
+                }
+
+                override fun onComplete() {
+                }
+
+                override fun onError(e: Throwable) {
+                    presenter.exibirErro(e.message)
+                }
+
+                override fun onNext(resposta: List<String>) {
                     presenter.exibirCategorias(resposta)
                 }
-            }
-
-            override fun onFailure(
-                call: Call<List<String>?>?,
-                t: Throwable?
-            ) {
-            }
-        })
+            })
     }
 
     private fun fetchRespostaUnica(chave: String) {
-        val call = RetrofitConfig().buildingService().respostaUnica(chave)
-        call.enqueue(object : Callback<ChuckResponse> {
-            override fun onResponse(
-                call: Call<ChuckResponse>?,
-                response: Response<ChuckResponse>?
-            ) {
-                response?.body()?.let {
-                    val resposta: ChuckResponse = it
+
+        val observable = RetrofitConfig().buildingService().respostaUnica(chave)
+        observable
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<ChuckResponse> {
+                override fun onSubscribe(d: Disposable?) {
+                }
+
+                override fun onComplete() {
+                }
+
+                override fun onError(e: Throwable) {
+                    presenter.exibirErro(e.message)
+                }
+
+                override fun onNext(resposta: ChuckResponse) {
                     presenter.exibirResultado(resposta)
                 }
-            }
-
-            override fun onFailure(
-                call: Call<ChuckResponse>?,
-                t: Throwable?
-            ) {
-                presenter.exibirErro(t?.message)
-            }
-        })
+            })
     }
 }
