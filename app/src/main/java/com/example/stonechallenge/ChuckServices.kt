@@ -3,16 +3,16 @@ package com.example.stonechallenge
 
 import io.reactivex.Observable
 import retrofit2.http.GET
-import retrofit2.http.Path
+import retrofit2.http.Url
 
 interface ChuckServices {
 
-    @GET("{tag}")
-    fun list(@Path("tag") tag: String?): Observable<List<ChuckResponse>>
+    @GET()
+    fun list(@Url tag: String?): Observable<List<ChuckFact>>
 
     @GET(Constants.LIST_ALL_CATEGORIES)
     fun listCategories(): Observable<List<String>>
 
-    @GET("{tag}")
-    fun respostaUnica(@Path("tag") tag: String?): Observable<ChuckResponse>
+    @GET()
+    fun respostaUnica(@Url tag: String?): Observable<ChuckFact>
 }

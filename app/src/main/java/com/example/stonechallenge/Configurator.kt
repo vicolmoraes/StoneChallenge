@@ -4,13 +4,13 @@ enum class Configurator {
 
     INSTANCE;
 
-    fun setCleanArchitecture(mainActivity: MainActivity) {
+    fun setCleanArchitecture(activity: ActivityPadrao) {
         val presenter = Presenter()
-        presenter.mainActivity = mainActivity
+        presenter.activity = activity
 
         val interactor = Interactor()
         interactor.presenter = presenter
 
-        mainActivity.interactor = interactor
+        activity.interactor = interactor
     }
 }

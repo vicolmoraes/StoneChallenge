@@ -1,14 +1,18 @@
 package com.example.stonechallenge
 
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.Toast
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
-    lateinit var bt: Button
-    lateinit var interactor: Interactor
+
+class MainActivity : AppCompatActivity(), ActivityPadrao {
+    lateinit var rvResultados: RecyclerView
+    override lateinit var interactor: Interactor
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -16,46 +20,38 @@ class MainActivity : AppCompatActivity() {
         Configurator.INSTANCE.setCleanArchitecture(this)
 
         findViews()
+        iniciarToolbar("Bem Vindo")
     }
 
-    private fun findViews() {
-        bt = bt_activity_main
-        bt.setOnClickListener {
-            interactor.fetchSearchRandom()
+    fun iniciarToolbar(titulo: String?) {
+        val toolbar: Toolbar = in_toolbar as Toolbar
+        setSupportActionBar(toolbar)
+        supportActionBar!!.setTitle(titulo)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.title.equals("pesquisar")) {
+            val intent = Intent(this, SearchActivity::class.java)
+            startActivity(intent)
+            finish()
         }
+
+        return true
+    }
+    private fun findViews() {
+        rvResultados = rv_resultados_activity_main
+//        bt = bt_activity_main
+//        bt.setOnClickListener {
+//            interactor.fetchSearchRandom()
+//        }
     }
 
-    fun exibirErro(erro: String?) {
-        Toast.makeText(
-            baseContext,
-            erro,
-            Toast.LENGTH_SHORT
-        ).show()
-    }
 
-    fun exibirResultado(resposta: ChuckResponse) {
-        Toast.makeText(
-            baseContext,
-            resposta.value,
-            Toast.LENGTH_SHORT
-        ).show()
-    }
-
-    fun listarRespostas(resposta: List<ChuckResponse>) {
-        Toast.makeText(
-            baseContext,
-            resposta.get(0).value,
-            Toast.LENGTH_SHORT
-        ).show()
-    }
-
-    fun listarCategorias(resposta: List<String>) {
-        Toast.makeText(
-            baseContext,
-            resposta.get(0),
-            Toast.LENGTH_SHORT
-        ).show()
-    }
 }
 
 

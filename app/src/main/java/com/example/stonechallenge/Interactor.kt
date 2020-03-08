@@ -20,11 +20,11 @@ class Interactor {
     }
 
     private fun fetch(chave: String) {
-        val observable = RetrofitConfig().buildingService().list(chave)
+        val observable = RetrofitConfig().buildingService().list(chave.trim())
         observable
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<List<ChuckResponse>> {
+            .subscribe(object : Observer<List<ChuckFact>> {
                 override fun onSubscribe(d: Disposable?) {
                 }
 
@@ -35,7 +35,7 @@ class Interactor {
                     presenter.exibirErro(e.message)
                 }
 
-                override fun onNext(resposta: List<ChuckResponse>) {
+                override fun onNext(resposta: List<ChuckFact>) {
                     presenter.exibirResultados(resposta)
                 }
             })
@@ -69,7 +69,7 @@ class Interactor {
         observable
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<ChuckResponse> {
+            .subscribe(object : Observer<ChuckFact> {
                 override fun onSubscribe(d: Disposable?) {
                 }
 
@@ -77,10 +77,10 @@ class Interactor {
                 }
 
                 override fun onError(e: Throwable) {
-                    presenter.exibirErro(e.message)
+                    presenter.exibirErro(e.message + e.cause)
                 }
 
-                override fun onNext(resposta: ChuckResponse) {
+                override fun onNext(resposta: ChuckFact) {
                     presenter.exibirResultado(resposta)
                 }
             })
