@@ -7,10 +7,12 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.example.stonechallenge.R
 import com.example.stonechallenge.entity.ChuckFact
 import com.example.stonechallenge.interactor.Interactor
 import com.example.stonechallenge.router.Router
+import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
@@ -21,17 +23,24 @@ import java.io.Serializable
 class SearchActivity : AppCompatActivity(),
     ActivityPadrao {
     lateinit var etBusca: EditText
+    lateinit var rvCategorias: RecyclerView
+    lateinit var listaCategorias: ArrayList<String>
     override lateinit var interactor: Interactor
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
+        listaCategorias = ArrayList()
         Router.INSTANCE.setCleanArchitecture(this)
         findViews()
     }
 
     private fun findViews() {
         etBusca = et_activity_search
+        rvCategorias = rv_categorias_activity_search
+
+        interactor.fetchSearchListCategories()
 
         etBusca.setOnKeyListener(object : View.OnKeyListener {
             override fun onKey(
@@ -49,11 +58,11 @@ class SearchActivity : AppCompatActivity(),
             }
         })
 
-        val recyclerView = rv_categorias_activity_search
         val layoutManager = FlexboxLayoutManager(this)
-        layoutManager.flexDirection = FlexDirection.COLUMN
-        layoutManager.justifyContent = JustifyContent.FLEX_END
-        recyclerView.layoutManager = layoutManager
+        layoutManager.flexDirection = FlexDirection.ROW
+        layoutManager.justifyContent = JustifyContent.CENTER
+        layoutManager.alignItems = AlignItems.CENTER
+        rvCategorias.layoutManager = layoutManager
     }
 
     override fun exibirErro(resposta: String?) {
@@ -83,10 +92,21 @@ class SearchActivity : AppCompatActivity(),
     }
 
     override fun listarCategorias(resposta: List<String>) {
-        Toast.makeText(
-            baseContext,
-            resposta.get(0),
-            Toast.LENGTH_SHORT
-        ).show()
+
+        listaCategorias.addAll(resposta.subList(0, 8))
+
+        setRecycler()
+    }
+
+    private fun setRecycler() {
+        rvCategorias.adapter =
+            CategoryAdapter(
+                listaCategorias,
+                this,
+                { partItem: String -> partItemClicked(partItem) })
+    }
+
+    private fun partItemClicked(categoria: String) {
+        interactor.fetchSearchCategorie(categoria.trim())
     }
 }
