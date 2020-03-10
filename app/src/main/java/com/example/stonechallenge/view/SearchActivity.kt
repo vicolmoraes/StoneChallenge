@@ -79,7 +79,7 @@ class SearchActivity : AppCompatActivity(),
     override fun exibirErro(resposta: String?) {
         Toast.makeText(
             baseContext,
-            "Verifique sua internet!",
+            "Chuck has nothing to say about it",
             Toast.LENGTH_SHORT
         ).show()
     }

@@ -128,13 +128,12 @@ class BancoController(var baseContext: Context) {
     }
 
     fun alteraRegistroSugestao(
-        id: Int,
         titulo: String
     ) {
         val valores: ContentValues
         val where: String
         db = banco.writableDatabase
-        where = CriaBanco.ID + "=" + id
+        where = CriaBanco.TITULO + "=" + titulo
         valores = ContentValues()
         valores.put(CriaBanco.TITULO, titulo)
         db.update(CriaBanco.TABELA_SUGESTAO, valores, where, null)

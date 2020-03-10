@@ -18,11 +18,11 @@ class SuggestionAdapter(
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(p0: RecyclerView.ViewHolder, p1: Int) {
-        (p0 as CategoryViewHolder).bind(items[p1], clickListener)
+        (p0 as SuggestionViewHolder).bind(items[p1], clickListener)
     }
 
-    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): CategoryViewHolder {
-        return CategoryViewHolder(
+    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): SuggestionViewHolder {
+        return SuggestionViewHolder(
             LayoutInflater.from(context).inflate(
                 R.layout.item_suggestion,
                 p0,
@@ -35,7 +35,7 @@ class SuggestionAdapter(
         return items.size
     }
 
-    class CategoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class SuggestionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val itemVieww = view
         fun bind(part: String, clickListener: (String) -> Unit) {
 
