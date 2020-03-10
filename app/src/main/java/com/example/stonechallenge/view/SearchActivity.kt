@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.stonechallenge.BancoController
 import com.example.stonechallenge.R
 import com.example.stonechallenge.entity.ChuckFact
 import com.example.stonechallenge.interactor.Interactor
@@ -25,6 +26,7 @@ class SearchActivity : AppCompatActivity(),
     lateinit var etBusca: EditText
     lateinit var rvCategorias: RecyclerView
     lateinit var listaCategorias: ArrayList<String>
+    lateinit var crud: BancoController
     override lateinit var interactor: Interactor
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,9 +36,13 @@ class SearchActivity : AppCompatActivity(),
         listaCategorias = ArrayList()
         Router.INSTANCE.setCleanArchitecture(this)
         findViews()
+        setRecycler()
     }
 
     private fun findViews() {
+        crud = BancoController(this)
+        crud.iniciar()
+
         etBusca = et_activity_search
         rvCategorias = rv_categorias_activity_search
 
@@ -92,8 +98,13 @@ class SearchActivity : AppCompatActivity(),
     }
 
     override fun listarCategorias(resposta: List<String>) {
-
+        listaCategorias.clear()
         listaCategorias.addAll(resposta.subList(0, 8))
+        var listaBanco: ArrayList<String>
+        listaBanco = crud.carregaListaCategorias()
+
+        if (listaBanco.isEmpty())
+            crud.insereListaCategoria(listaCategorias)
 
         setRecycler()
     }
@@ -101,7 +112,7 @@ class SearchActivity : AppCompatActivity(),
     private fun setRecycler() {
         rvCategorias.adapter =
             CategoryAdapter(
-                listaCategorias,
+                crud.carregaListaCategorias(),
                 this,
                 { partItem: String -> partItemClicked(partItem) })
     }
