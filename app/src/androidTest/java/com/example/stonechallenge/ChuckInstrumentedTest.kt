@@ -1,10 +1,12 @@
 package com.example.stonechallenge
 
+import android.view.KeyEvent
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.NoMatchingViewException
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -39,7 +41,8 @@ class ChuckInstrumentedTest {
     fun checarFatoDoTextoDigitado() {
         checarAberturaDaSearchActivity()
         onView(withId(R.id.et_activity_search)).perform(typeText("movie"))
-        Thread.sleep(2000);
+        onView(withId(R.id.et_activity_search)).perform(ViewActions.pressKey(KeyEvent.KEYCODE_ENTER));
+        Thread.sleep(2500);
         onView(withId(R.id.rv_resultados_activity_main)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_resultados_activity_main))
             .check(matches(hasDescendant(withId(R.id.tv_frase_item_chuck_fact))));
