@@ -10,14 +10,16 @@ class CriaBanco internal constructor(context: Context?) :
     SQLiteOpenHelper(context, NOME_BANCO, null, VERSAO) {
     var db: SQLiteDatabase? = null
     override fun onCreate(db: SQLiteDatabase) {
-        val sql = ("CREATE TABLE " + TABELA_CATEGORIA + " ( "
-                + ID + " integer primary key autoincrement,"
-                + TITULO + " text"
-                + " );" + "CREATE TABLE " + TABELA_SUGESTAO + " ( "
+        val sqlCategoria = ("CREATE TABLE " + TABELA_CATEGORIA + " ( "
                 + ID + " integer primary key autoincrement,"
                 + TITULO + " text"
                 + " );")
-        db.execSQL(sql)
+        val sqlSugestao = ("CREATE TABLE " + TABELA_SUGESTAO + " ( "
+                + ID + " integer primary key autoincrement,"
+                + TITULO + " text"
+                + " );")
+        db.execSQL(sqlCategoria)
+        db.execSQL(sqlSugestao)
     }
 
     override fun onUpgrade(
@@ -26,6 +28,7 @@ class CriaBanco internal constructor(context: Context?) :
         newVersion: Int
     ) {
         db.execSQL("DROP TABLE IF EXISTS $TABELA_CATEGORIA")
+        db.execSQL("DROP TABLE IF EXISTS $TABELA_SUGESTAO")
         onCreate(db)
     }
 
@@ -40,6 +43,6 @@ class CriaBanco internal constructor(context: Context?) :
         const val TABELA_SUGESTAO = "sugestoes"
         const val ID = "id"
         const val TITULO = "titulo"
-        const val VERSAO = 1
+        const val VERSAO = 2
     }
 }

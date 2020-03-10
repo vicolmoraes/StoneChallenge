@@ -19,12 +19,15 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import kotlinx.android.synthetic.main.activity_search.*
 import java.io.Serializable
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class SearchActivity : AppCompatActivity(),
     ActivityPadrao {
     lateinit var etBusca: EditText
     lateinit var rvCategorias: RecyclerView
+    lateinit var rvSugestoes: RecyclerView
     lateinit var listaCategorias: ArrayList<String>
     lateinit var crud: BancoController
     override lateinit var interactor: Interactor
@@ -45,6 +48,7 @@ class SearchActivity : AppCompatActivity(),
 
         etBusca = et_activity_search
         rvCategorias = rv_categorias_activity_search
+        rvSugestoes = rv_sugestoes_activity_search
 
         interactor.fetchSearchListCategories()
 
@@ -57,6 +61,7 @@ class SearchActivity : AppCompatActivity(),
                 if (event.getAction() === KeyEvent.ACTION_DOWN &&
                     keyCode == KeyEvent.KEYCODE_ENTER
                 ) {
+                    crud.insereDadoSugestao(etBusca.text.toString().trim())
                     interactor.fetchSearchText(etBusca.text.toString().trim())
                     return true
                 }
@@ -74,7 +79,7 @@ class SearchActivity : AppCompatActivity(),
     override fun exibirErro(resposta: String?) {
         Toast.makeText(
             baseContext,
-            "Chuck has nothing to say about it",
+            "Verifique sua internet!",
             Toast.LENGTH_SHORT
         ).show()
     }
@@ -114,10 +119,25 @@ class SearchActivity : AppCompatActivity(),
             CategoryAdapter(
                 crud.carregaListaCategorias(),
                 this,
-                { partItem: String -> partItemClicked(partItem) })
+                { partItem: String -> partItemClickedCategory(partItem) })
+
+        val sugestoes: ArrayList<String> = crud.carregaListaSugestoes()
+        if (!sugestoes.isEmpty()) {
+            Collections.reverse(sugestoes);
+            rvSugestoes.adapter =
+                SuggestionAdapter(
+                    sugestoes,
+                    this,
+                    { partItem: String -> partItemClickedSuggestion(partItem) })
+        }
     }
 
-    private fun partItemClicked(categoria: String) {
+    private fun partItemClickedCategory(categoria: String) {
         interactor.fetchSearchCategorie(categoria.trim())
+    }
+
+    private fun partItemClickedSuggestion(sugestao: String) {
+        etBusca.setText(sugestao)
+        interactor.fetchSearchText(sugestao.trim())
     }
 }

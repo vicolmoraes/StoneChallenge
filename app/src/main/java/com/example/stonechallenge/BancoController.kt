@@ -40,6 +40,7 @@ class BancoController(var baseContext: Context) {
             CriaBanco.ID,
             CriaBanco.TITULO
         )
+
         db = banco.readableDatabase
         if (!banco.doesDatabaseExist(contexto)) {
             banco.onCreate(db)
@@ -55,6 +56,17 @@ class BancoController(var baseContext: Context) {
     fun carregaListaCategorias(): ArrayList<String> {
         var lista: ArrayList<String> = ArrayList()
         var cursor: Cursor = carregaDadosCategoria()
+        if (cursor.moveToFirst()) {
+            do {
+                lista.add(cursor.getString(1))
+            } while (cursor.moveToNext())
+        }
+        return lista
+    }
+
+    fun carregaListaSugestoes(): ArrayList<String> {
+        var lista: ArrayList<String> = ArrayList()
+        var cursor: Cursor = carregaDadosSugestao()
         if (cursor.moveToFirst()) {
             do {
                 lista.add(cursor.getString(1))
@@ -97,7 +109,7 @@ class BancoController(var baseContext: Context) {
         }
     }
 
-    fun carregaDadosSugestao(): Cursor? {
+    fun carregaDadosSugestao(): Cursor {
         val cursor: Cursor?
         val campos = arrayOf(
             CriaBanco.ID,
